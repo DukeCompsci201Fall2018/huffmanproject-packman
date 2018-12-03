@@ -193,11 +193,15 @@ public class HuffProcessor {
 		       if (bits == -1) {
 		           throw new HuffException("bad input, no PSEUDO_EOF");
 		       }
-		       else if (bits == 0) {
-		    	   current = current.myLeft;
-		       current = current.myRight;
-		       }
-		       else if (bits==1) {
+		       else  {
+		    	   if(bits==0) {
+		    	    current = current.myLeft;
+		    	   }
+		    	   if(bits==1) {
+		            current = current.myRight;
+		    	   }
+		       
+		      if (root.myLeft==null && root.myRight==null) {
 		               if (current.myValue == PSEUDO_EOF) 
 		                   break;   // out of loop
 		               else {
@@ -211,3 +215,4 @@ public class HuffProcessor {
 
 		
 	}
+}
