@@ -76,11 +76,11 @@ public class HuffProcessor {
 		// TODO Auto-generated method stub
 		if(root==null) return;
 		if(root.myLeft==null && root.myRight==null) {
-			out.write(1+ root.myValue);
+			out.writeBits(BITS_PER_WORD+1, 1+ root.myValue);
 			
 		}
 		else {
-			out.write(0);
+			out.writeBits(BITS_PER_WORD+1,0);
 			writeHeader(root.myLeft,out);
 			writeHeader(root.myRight,out);
 		}
@@ -194,14 +194,7 @@ public class HuffProcessor {
 		           throw new HuffException("bad input, no PSEUDO_EOF");
 		       }
 		       else  {
-		    	   if(bits==0) {
-		    	    current = current.myLeft;
-		    	   }
-		    	   if(bits==1) {
-		            current = current.myRight;
-		    	   }
-		       
-		      if (root.myLeft==null && root.myRight==null) {
+		    	   if (root.myLeft==null && root.myRight==null) {
 		               if (current.myValue == PSEUDO_EOF) 
 		                   break;   // out of loop
 		               else {
@@ -210,6 +203,16 @@ public class HuffProcessor {
 		                   current = root; // start back after leaf
 		               }
 		           }
+		    	   else {
+		    	   if(bits==0) {
+		    	    current = current.myLeft;
+		    	   }
+		    	   if(bits==1) {
+		            current = current.myRight;
+		    	   }
+		    	   }
+		       
+		      
 		       }
 		   }
 
