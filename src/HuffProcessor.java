@@ -65,7 +65,7 @@ public class HuffProcessor {
 		while (true){
 			  int val = in.readBits(BITS_PER_WORD);
 			   if (val == -1) break;
-			   code=codings['A'];
+			   code=codings[val];
 				out.writeBits(code.length(), Integer.parseInt(code,2));
 			   }
 		 code=codings[PSEUDO_EOF];
@@ -178,7 +178,7 @@ public class HuffProcessor {
 			return new HuffNode(0,0,Left,Right);
 		}
 		else {
-			int value= in.readBits(BITS_PER_WORD+1);
+			int value = in.readBits(BITS_PER_WORD+1);
 			return new HuffNode(value,0,null,null);
 		}
 		// TODO Auto-generated method stub
@@ -194,23 +194,19 @@ public class HuffProcessor {
 		           throw new HuffException("bad input, no PSEUDO_EOF");
 		       }
 		       else  {
-		    	   if (root.myLeft==null && root.myRight==null) {
-		               if (current.myValue == PSEUDO_EOF) 
-		                   break;   // out of loop
-		               else {
-		                    //  current.myValue=out.writeBits(BITS_PER_WORD, in.readBits(BITS_PER_WORD));  
-		            	   out.writeBits(BITS_PER_WORD, in.readBits(BITS_PER_WORD));
-		                   current = root; // start back after leaf
-		               }
-		           }
-		    	   else {
 		    	   if(bits==0) {
-		    	    current = current.myLeft;
-		    	   }
-		    	   if(bits==1) {
-		            current = current.myRight;
-		    	   }
-		    	   }
+			    	    current = current.myLeft; 
+			    	   }
+			    	if(bits==1) {
+			            current = current.myRight;
+			            }
+		    	   if (current.myLeft==null && current.myRight==null) {
+		               if (current.myValue == PSEUDO_EOF) break;   // out of loop
+		               //  current.myValue=out.writeBits(BITS_PER_WORD, in.readBits(BITS_PER_WORD));  
+		               out.writeBits(BITS_PER_WORD, current.myValue);
+		               current = root; // start back after leaf
+		           }
+		    	  
 		       
 		      
 		       }
