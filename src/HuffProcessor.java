@@ -46,6 +46,10 @@ public class HuffProcessor {
         int[] counts=readForCounts(in);
         HuffNode root= makeTreeFromCounts(counts);
         String[] codings=  makeCodingsFromTree(root);
+        
+//        for(String s: codings) System.out.print(s);
+//        printTree(root);
+        
         out.writeBits(BITS_PER_INT, HUFF_TREE);
         writeHeader(root,out);
         in.reset();
@@ -76,11 +80,12 @@ public class HuffProcessor {
 		// TODO Auto-generated method stub
 		if(root==null) return;
 		if(root.myLeft==null && root.myRight==null) {
-			out.writeBits(BITS_PER_WORD+1, 1+ root.myValue);
+			out.writeBits(1, 1);
+			out.writeBits(BITS_PER_WORD+1, root.myValue);
 			
 		}
 		else {
-			out.writeBits(BITS_PER_WORD+1,0);
+			out.writeBits(1,0);
 			writeHeader(root.myLeft,out);
 			writeHeader(root.myRight,out);
 		}
@@ -120,7 +125,7 @@ public class HuffProcessor {
 		while(pq.size()>1) {
 			HuffNode left= pq.remove();
 			HuffNode right= pq.remove();
-			HuffNode t= new HuffNode(left.myWeight,right.myWeight,left,right);
+			HuffNode t= new HuffNode(0,left.myWeight+right.myWeight,left,right);
 			pq.add(t);
 			
 		}
@@ -214,4 +219,16 @@ public class HuffProcessor {
 
 		
 	}
+//	void printTree(HuffNode x)
+//	{
+//		 if(x==null)
+//			 return;
+//		 if(x.myLeft==null&&x.myRight==null)
+//			 System.out.println(x.myValue);
+//		 printTree(x.myLeft);
+//		 printTree(x.myRight);
+//	}
 }
+
+
+
